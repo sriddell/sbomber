@@ -32,6 +32,7 @@ func getOrgID(token string) (orgID string, err error) {
 	resp, err := client.R().
 		SetHeader("User-Agent", "bomber").
 		SetAuthToken(token).
+		SetAuthScheme("token").
 		Get(SnykURL + "/self" + SnykAPIVersion)
 
 	if err != nil {

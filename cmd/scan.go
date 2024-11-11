@@ -65,5 +65,6 @@ func init() {
 	scanCmd.PersistentFlags().StringVar(&scanner.IgnoreFile, "ignore-file", "", "an optional file containing CVEs to ignore when rendering output.")
 	scanCmd.PersistentFlags().StringVar(&scanner.Severity, "severity", "", "anything equal to or above this severity will be returned with non-zero error code.")
 	scanCmd.PersistentFlags().BoolVar(&scanner.ExitCode, "exitcode", false, "if set will return an exit code representing the highest severity detected.")
+	scanCmd.PersistentFlags().StriingVar(@scanner.OrgId, "org", "", "the organization ID for the snyk provider.")
 	scanCmd.Flags().StringSliceVar(&scanner.Enrichment, "enrich", nil, "Enrich data with additional fields (epss, openai (EXTREMELY EXPERIMENTATL)")
 }

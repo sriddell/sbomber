@@ -32,6 +32,7 @@ type Scanner struct {
 	ProviderName    string
 	Version         string
 	Afs             *afero.Afero
+	OrgId		    string
 }
 
 var loader Loader

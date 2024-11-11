@@ -160,6 +160,7 @@ func getVulnsForPurl(
 	resp, err := client.R().
 		SetHeader("User-Agent", "bomber").
 		SetAuthToken(token).
+		SetAuthScheme("token").
 		Get(issuesURL)
 
 	if err != nil {

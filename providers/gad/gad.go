@@ -159,6 +159,7 @@ func queryGitHubAdvisories(purl string, credentials models.Credentials) (*GraphQ
 	resp, _ := client.R().
 		SetBody(requestBody).
 		SetAuthToken(credentials.ProviderToken).
+		SetAuthScheme("token").
 		Post(githubGraphQLEndpoint)
 
 	var graphQLResponse GraphQLResponse

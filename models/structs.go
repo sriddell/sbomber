@@ -69,6 +69,7 @@ type Credentials struct {
 	Username      string
 	ProviderToken string
 	OpenAIAPIKey  string
+	OrgId		  string //optional orgid if using snyk provider credentials
 }
 
 // NewResults defines the high level output of bomber
