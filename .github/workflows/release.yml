@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  GOPROXY: direct
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -22,20 +25,25 @@ jobs:
           go-version: "1.23"
           check-latest: true
       - run: go version
-      - name: Generate SBOM
-        uses: anchore/sbom-action@v0
-        with:
-          artifact-name: bomber.cyclonedx.json
-          path: .
-          format: cyclonedx-json
-      - name: Release SBOM
-        uses: anchore/sbom-action/publish-sbom@v0
-        with:
-          sbom-artifact-match: ".*\\.cyclonedx.json$"
+      # - name: Generate SBOM
+      #   uses: anchore/sbom-action@v0
+      #   with:
+      #     artifact-name: bomber.cyclonedx.json
+      #     path: .
+      #     format: cyclonedx-json
+      # - name: Release SBOM
+      #   uses: anchore/sbom-action/publish-sbom@v0
+      #   with:
+      #     sbom-artifact-match: ".*\\.cyclonedx.json$"
       - name: GoReleaser Action
-        uses: goreleaser/goreleaser-action@v5.1.0
+        uses: goreleaser/goreleaser-action@v6.1.0
         with:
-          version: ${{ env.GITHUB_REF_NAME }}
-          args: release --clean
+          version: ~> v2
+          args: release --clean --snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+      - name: Upload assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbomber
+          path: dist/*
