@@ -32,7 +32,8 @@ type Scanner struct {
 	ProviderName    string
 	Version         string
 	Afs             *afero.Afero
-	OrgId		    string
+	OrgId           string
+	SnykPolicyFile  string
 }
 
 var loader Loader
@@ -99,6 +100,11 @@ func (s *Scanner) scanPackages(purls []string) (response []models.Package, err e
 	if err != nil {
 		util.PrintWarningf("Ignore flag set, but there was an error: %s", err)
 	}
+	ignoredDotSnykCVE, err := loader.LoadDotSnyk(s.SnykPolicyFile)
+	fmt.Printf("\nIgnored CVEs from .snyk: %v\n", ignoredDotSnykCVE)
+	if err != nil {
+		util.PrintWarningf("Snyk policy file flag set, but there was an error: %s", err)
+	}
 
 	for k, p := range response {
 		if len(p.Vulnerabilities) == 0 {
@@ -106,9 +112,12 @@ func (s *Scanner) scanPackages(purls []string) (response []models.Package, err e
 		}
 	}
 
+
+
 	// Filter, enrich, and ignore vulnerabilities as needed
 	s.filterVulnerabilities(response)
 	s.ignoreVulnerabilities(response, ignoredCVE)
+	s.ignoreVulnerabilities(response, ignoredDotSnykCVE)
 	s.enrichVulnerabilities(response)
 
 	if s.Output != "json" {

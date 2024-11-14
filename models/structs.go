@@ -72,6 +72,19 @@ type Credentials struct {
 	OrgId		  string //optional orgid if using snyk provider credentials
 }
 
+type DotSnyk struct {
+	Ignore IgnoreBlock `yaml:"ignore"`
+}
+
+type IgnoreBlock struct {
+	Exemptions map[string]Rule `yaml:"exemptions"`
+}
+
+type Rule struct {
+	Reason string `yaml:"reason"`
+	Expires string `yaml:"expires"`
+}
+
 // NewResults defines the high level output of bomber
 func NewResults(packages []Package, summary Summary, scanned []ScannedFile, licenses []string, version, providerName string, severityFilter string) Results {
 	return Results{
