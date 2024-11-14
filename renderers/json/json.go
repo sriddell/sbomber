@@ -23,8 +23,7 @@ func (Renderer) Render(results models.Results) error {
 		afs = &afero.Afero{Fs: afero.NewOsFs()}
 	}
 
-	filename := "bomber-results.html"
-	util.PrintInfo("Writing JSON output:", filename)
+	filename := "bomber-results.json"
 
 	err := writeTemplate(afs, filename, results)
 
