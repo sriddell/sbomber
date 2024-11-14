@@ -101,7 +101,6 @@ func (s *Scanner) scanPackages(purls []string) (response []models.Package, err e
 		util.PrintWarningf("Ignore flag set, but there was an error: %s", err)
 	}
 	ignoredDotSnykCVE, err := loader.LoadDotSnyk(s.SnykPolicyFile)
-	fmt.Printf("\nIgnored CVEs from .snyk: %v\n", ignoredDotSnykCVE)
 	if err != nil {
 		util.PrintWarningf("Snyk policy file flag set, but there was an error: %s", err)
 	}

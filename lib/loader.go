@@ -198,7 +198,7 @@ type SnykIgnore struct {
 func (l *Loader) LoadDotSnyk(dotSnykFile string) (cves []string, err error) {
 	cves = make([]string, 0)
 	if dotSnykFile == "" {
-		fmt.Printf("No .snyk file specified\n")
+		log.Printf("No .snyk file specified\n")
 		return
 	}
 	var snykIgnore SnykIgnore
@@ -210,7 +210,7 @@ func (l *Loader) LoadDotSnyk(dotSnykFile string) (cves []string, err error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("\nSnykIgnore: %v\n", snykIgnore.Ignore)
+	log.Printf("\nSnykIgnore: %v\n", snykIgnore.Ignore)
 	for vulnId, rules := range snykIgnore.Ignore {
 		for _, rule := range rules {
 			for path, details := range rule {
@@ -228,52 +228,6 @@ func (l *Loader) LoadDotSnyk(dotSnykFile string) (cves []string, err error) {
 				}
 			}
 		}
-
-		return cves, nil
 	}
-
-	// cves = make([]string, 0)
-	// log.Printf("Loading .snyk file: %v\n", dotSnykFile)
-	// exists, _ := l.Afs.Exists(dotSnykFile)
-	// if !exists {
-	// 	log.Printf(".snyk file not found: %v\n", dotSnykFile)
-	// 	return nil, fmt.Errorf(".snyk file not found: %v", dotSnykFile)
-	// }
-	// log.Printf(".snyk file found: %v\n", dotSnykFile)
-	// result, err := l.UnmarshalYAMLToMap(dotSnykFile)
-
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// fmt.Printf("\nResult: %v\n", result["ignore"])
-	// ignore, ok := result["ignore"].([]map[string]map[string])
-	// fmt.Printf("\nOK: %v\n", ok)
-	// fmt.Printf("\nCast result: %v\n", result["ignore"])
-
-	// if !ok {
-	// 	return nil, fmt.Errorf("failed to cast ignore section to expected type")
-	// }
-	// fmt.Printf("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
-
-	// fmt.Printf("Ignore: %v\n", ignore)
-	// for vulnId, rawIgnores := range ignore {
-	// 	rawRules := rawIgnores.(map[string]interface{})
-	// 	for path, rawDetails := range rawRules {
-	// 		details := rawDetails.(map[string]string)
-	// 		if path == "*" {
-	// 			expires, err := time.Parse(time.RFC3339, details["expires"])
-	// 			if err != nil {
-	// 				log.Printf("Error parsing expiration date for %v: %v\n", vulnId, err)
-	// 				continue
-	// 			}
-	// 			if expires.Before(time.Now()) {
-	// 				log.Printf("Ignoring expired rule for %v\n", vulnId)
-	// 				continue
-	// 			}
-	// 			cves = append(cves, vulnId)
-	// 		}
-	// 	}
-	// }
-	// fmt.Printf("Ignored CVEs from .snyk: %v\n", cves)
 	return cves, nil
 }
