@@ -15,7 +15,6 @@ type Renderer struct{}
 
 // Render outputs json to STDOUT
 func (Renderer) Render(results models.Results) error {
-	b, _ := json.MarshalIndent(results, "", "\t")
 	var afs *afero.Afero
 
 	if results.Meta.Provider == "test" {
@@ -24,7 +23,16 @@ func (Renderer) Render(results models.Results) error {
 		afs = &afero.Afero{Fs: afero.NewOsFs()}
 	}
 
-	filename := "bomber-results.json"
+	filename := "bomber-results.html"
+	util.PrintInfo("Writing JSON output:", filename)
+
+	err := writeTemplate(afs, filename, results)
+
+	return err
+}
+
+func writeTemplate(afs *afero.Afero, filename string, results models.Results) error {
+	b, _ := json.MarshalIndent(results, "", "\t")
 	util.PrintInfo("Writing JSON output:", filename)
 	file, err := afs.Create(filename)
 	if err != nil {
