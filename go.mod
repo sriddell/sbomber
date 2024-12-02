@@ -1,6 +1,6 @@
 module github.com/devops-kung-fu/bomber
 
-go 1.22.7
+go 1.22.9
 
 require (
 	github.com/CycloneDX/cyclonedx-go v0.9.1

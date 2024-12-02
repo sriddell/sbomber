@@ -2,20 +2,17 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"log"
 	"os"
 
-	"github.com/google/go-github/github"
-	"github.com/gookit/color"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 )
 
 var (
-	version = "0.0.11"
+	version = "0.0.12"
 	output  string
 	//Afs stores a global OS Filesystem that is used throughout bomber
 	Afs = &afero.Afero{Fs: afero.NewOsFs()}
@@ -30,29 +27,10 @@ var (
 			if !debug {
 				log.SetOutput(io.Discard)
 			}
-			if output != "json" {
-				log.Println("Start")
-				fmt.Println()
-				printAsciiArt()
-				fmt.Println()
-				fmt.Println("DKFM - DevOps Kung Fu Mafia")
-				fmt.Println("https://github.com/devops-kung-fu/bomber")
-				fmt.Printf("Version: %s\n", version)
-				fmt.Println()
-				checkForNewVersion(version)
-			}
 		},
 	}
 )
 
-func printAsciiArt() {
-	response := `
-   __              __          
-  / /  ___  __ _  / /  ___ ____
- / _ \/ _ \/  ' \/ _ \/ -_) __/
-/_.__/\___/_/_/_/_.__/\__/_/   `
-	color.Style{color.FgWhite, color.OpBold}.Println(response)
-}
 
 // Execute creates the command tree and handles any error condition returned
 func Execute() {
@@ -67,18 +45,4 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&output, "output", "stdout", "how bomber should output findings (json, html, ai, md, stdout)")
 }
 
-func checkForNewVersion(currentVersion string) {
-	ctx := context.Background()
-	client := github.NewClient(nil)
 
-	release, _, err := client.Repositories.GetLatestRelease(ctx, "devops-kung-fu", "bomber")
-	if err != nil {
-		log.Printf("Error fetching latest release: %v\n", err)
-		return
-	}
-
-	latestVersion := release.GetTagName()[1:] // Remove leading 'v'
-	if latestVersion != currentVersion {
-		color.Yellow.Printf("A newer version of bomber is available (%s)\n\n", latestVersion)
-	}
-}
