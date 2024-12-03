@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	version = "0.0.12"
+	version = "0.0.13"
 	output  string
 	//Afs stores a global OS Filesystem that is used throughout bomber
 	Afs = &afero.Afero{Fs: afero.NewOsFs()}
