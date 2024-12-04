@@ -45,7 +45,7 @@ type Results struct {
 	Files    []ScannedFile `json:"files,omitempty"`
 	Licenses []string      `json:"licenses,omitempty"`
 	Summary  Summary       `json:"summary,omitempty"`
-	Packages []Package     `json:"packages"`
+	Packages []Package     `json:"packages" default:"[]"`
 }
 
 // Meta contains system and execution information about the results from bomber
